@@ -64,10 +64,12 @@ jobs:
         uses: azure/setup-kubectl@v3
       - name: Setup Helm
         uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup kubectl context
         uses: azure/k8s-set-context@v3
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           context: ${{ vars.KUBECONFIG_CONTEXT }}
       - name: Deploy Helm Chart with version
-        run: helm upgrade hello-cicd-world chart/ --install --reuse-values --create-namespace --namespace hello-cicd-world --set image.tag=${{ needs.Abnahme.outputs.version }}
+        run: helm upgrade hello-cicd-world ./chart --install --reuse-values --create-namespace --namespace hello-cicd-world --set image.tag=${{ needs.Abnahme.outputs.version }}
