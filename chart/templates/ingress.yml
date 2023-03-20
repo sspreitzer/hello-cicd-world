@@ -6,7 +6,7 @@ metadata:
     name: hello
 spec:
   rules:
-  - host: {{ .Values.ingress.host }}
+  - host: {{ .Values.ingress.host | default "hello.tooling.k8s.aveniq.cloud" }}
     http:
       paths:
       - pathType: Prefix
