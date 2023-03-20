@@ -13,5 +13,5 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: sspreitzer/hello-cicd-world:latest
+          tags: ghcr.io/sspreitzer/hello-cicd-world:latest
  
