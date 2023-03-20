@@ -32,6 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: Build
     steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v3
+      - name: Read VERSION file
+        id: getversion
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
       - name: Do nothing yet
         run: "true"
 
@@ -39,5 +44,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: Abnahme
     steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v3
+      - name: Read VERSION file
+        id: getversion
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
       - name: Do nothing yet
         run: "true"
