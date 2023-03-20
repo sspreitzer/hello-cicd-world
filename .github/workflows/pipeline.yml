@@ -10,6 +10,8 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v3
       - name: Read VERSION file
         id: getversion
         run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
