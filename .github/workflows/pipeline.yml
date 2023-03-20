@@ -47,10 +47,29 @@ jobs:
         run: "rackup --server puma --host localhost --port 80 &"
       - name: Check if version served is correct
         run: sleep 1; curl http://localhost | grep ${{ needs.Build.outputs.version }}
+    outputs:
+      version: ${{ needs.Build.outputs.version }}
 
 
   Release:
     runs-on: ubuntu-latest
     needs: Abnahme
+    defaults:
+      run:
+        shell: bash
+        working-directory: /tmp
     steps:
-      - run: "true"
+      - name: Download kubectl
+        run: curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl
+      - name: Install kubectl
+        run: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      - name: Download Helm
+        run: curl -LO https://get.helm.sh/helm-v3.11.2-linux-amd64.tar.gz
+      - name: Unpack Helm
+        run: tar xvzf helm-*.tar.gz
+      - name: Install Helm
+        run: install -o root -g root -m 0755 linux-amd64/helm /usr/local/bin/helm
+      - name: Set kubectl context
+        run: kubectl config set-context default
+      - name: Deploy Helm Chart with version
+        run: helm upgrade hello-cicd-world chart/ --install --reuse-values --create-namespace --namespace hello-cicd-world --set image.tag=${{ needs.Abnahme.outputs.version }}
