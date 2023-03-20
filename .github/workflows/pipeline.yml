@@ -9,10 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Git repository
-        uses: actions/checkout@v2
       - name: Build and push container image
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: sspreitzer/hello-cicd-world:latest
+ 
