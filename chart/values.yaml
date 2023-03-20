@@ -1,3 +1,6 @@
 image:
   name: sspreitzer/hello-cicd-world
   tag: v1.0.0
+
+ingress:
+  host: hello.tooling.k8s.aveniq.cloud
