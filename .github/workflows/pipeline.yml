@@ -35,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: Build
     container:
-      image: sspreitzer/hello-cicd-world:${{ needs.Build.ouputs.version }}
+      image: sspreitzer/hello-cicd-world:${{ needs.Build.outputs.version }}
     steps:
       - name: Check if version file is correct
-        run: test "$(cat VERSION)" = "${{ needs.Build.ouputs.version }}"
+        run: test "$(cat VERSION)" = "${{ needs.Build.outputs.version }}"
       - name: Check if version served is correct
-        run: curl http://localhost | grep ${{ needs.Build.ouputs.version }}
+        run: curl http://localhost | grep ${{ needs.Build.outputs.version }}
 
 
   Release:
