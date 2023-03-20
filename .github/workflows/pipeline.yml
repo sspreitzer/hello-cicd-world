@@ -27,27 +27,24 @@ jobs:
           tags: |
             sspreitzer/hello-cicd-world:latest
             sspreitzer/hello-cicd-world:${{ steps.getversion.outputs.version }}
+    outputs:
+      version: ${{ steps.getversion.outputs.version }}
+
   
   Abnahme:
     runs-on: ubuntu-latest
     needs: Build
+    container:
+      image: sspreitzer/hello-cicd-world:${{ jobs.Build.ouputs.version }}
     steps:
-      - name: Checkout Git repository
-        uses: actions/checkout@v3
-      - name: Read VERSION file
-        id: getversion
-        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
-      - name: Do nothing yet
-        run: "true"
+      - name: Check if version file is correct
+        run: test "$(cat VERSION)" = "${{ jobs.Build.ouputs.version }}"
+      - name: Check if version served is correct
+        run: curl http://localhost | grep ${{ jobs.Build.ouputs.version }}
+
 
   Release:
     runs-on: ubuntu-latest
     needs: Abnahme
     steps:
-      - name: Checkout Git repository
-        uses: actions/checkout@v3
-      - name: Read VERSION file
-        id: getversion
-        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
-      - name: Do nothing yet
-        run: "true"
+      - run: "true"
