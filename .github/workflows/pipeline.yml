@@ -57,19 +57,17 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: /tmp
     steps:
-      - name: Download kubectl
-        run: curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl
-      - name: Install kubectl
-        run: install -m 0755 kubectl /usr/local/bin/kubectl
-      - name: Download Helm
-        run: curl -LO https://get.helm.sh/helm-v3.11.2-linux-amd64.tar.gz
-      - name: Unpack Helm
-        run: tar xvzf helm-*.tar.gz
-      - name: Install Helm
-        run: install -m 0755 linux-amd64/helm /usr/local/bin/helm
-      - name: Set kubectl context
-        run: kubectl config set-context default
+      - name: Checkout Git repository
+        uses: actions/checkout@v3
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+      - name: Setup kubectl context
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          context: ${{ vars.KUBECONFIG_CONTEXT }}
       - name: Deploy Helm Chart with version
         run: helm upgrade hello-cicd-world chart/ --install --reuse-values --create-namespace --namespace hello-cicd-world --set image.tag=${{ needs.Abnahme.outputs.version }}
