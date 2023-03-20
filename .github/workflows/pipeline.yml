@@ -36,11 +36,17 @@ jobs:
     needs: Build
     container:
       image: sspreitzer/hello-cicd-world:${{ needs.Build.outputs.version }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: /usr/src/app
     steps:
       - name: Check if version file is correct
-        run: test "$(cat /usr/src/app/VERSION)" = "${{ needs.Build.outputs.version }}"
+        run: test "$(cat VERSION)" = "${{ needs.Build.outputs.version }}"
+      - name: Run rackup
+        run: "rackup --server puma --host localhost --port 80 &"
       - name: Check if version served is correct
-        run: curl http://localhost | grep ${{ needs.Build.outputs.version }}
+        run: sleep 1; curl http://localhost | grep ${{ needs.Build.outputs.version }}
 
 
   Release:
