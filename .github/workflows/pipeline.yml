@@ -38,7 +38,7 @@ jobs:
       image: sspreitzer/hello-cicd-world:${{ needs.Build.outputs.version }}
     steps:
       - name: Check if version file is correct
-        run: test "$(cat VERSION)" = "${{ needs.Build.outputs.version }}"
+        run: test "$(cat /usr/src/app/VERSION)" = "${{ needs.Build.outputs.version }}"
       - name: Check if version served is correct
         run: curl http://localhost | grep ${{ needs.Build.outputs.version }}
 
